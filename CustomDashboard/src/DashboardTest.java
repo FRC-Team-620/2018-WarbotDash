@@ -9,6 +9,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -33,16 +35,27 @@ public class DashboardTest extends Application
 
 		BorderPane root = new BorderPane();
 		
-		Text text = new Text("");
+		Text connectionStatus = new Text("");
+		root.setTop(connectionStatus);
+		
+		Text dropDownLabel = new Text("Enter Starting Position:");
+		
 		ObservableList<String> autoOptions = FXCollections.observableArrayList();
 		ComboBox<String> dropDown = new ComboBox<>(autoOptions);
-		Button upload = new Button("Upload");
 
-		root.setTop(text);
-		root.setCenter(dropDown);
+		HBox selectionArea = new HBox(dropDownLabel, dropDown);
+		
+		Text currentSelected = new Text("Not Connected");
+		
+		VBox info = new VBox(selectionArea, currentSelected);
+		
+		root.setCenter(info);
+		
+		Button upload = new Button("Upload");
+		
 		root.setBottom(upload);
 		
-		Scene scene = new Scene(root);
+		Scene scene = new Scene(root, 600, 400);
 		primaryStage.setScene(scene);
 		
 		NetworkTableEntry startingPositionOptions = networkTables.getEntry("/SmartDashboard/Starting Position/options");
@@ -54,11 +67,15 @@ public class DashboardTest extends Application
 		{
 			if(networkTables.isConnected())
 			{
-				text.setText("Connected");
+				connectionStatus.setText("Connected");
 				autoOptions.setAll(startingPositionOptions.getStringArray(new String[] {"Unable to Load Options"}));
+				currentSelected.setText("Selected: " + startingPositionSelected.getString("Unable to Load"));
 			}
 			else
-				text.setText("Not Connected");
+			{
+				currentSelected.setText("Not Connected");
+				connectionStatus.setText("Not Connected");
+			}
 		}));
 		updater.setCycleCount(Timeline.INDEFINITE);
 		updater.play();
