@@ -1,5 +1,5 @@
-import java.util.Arrays;
-
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -12,9 +12,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-
-import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.networktables.NetworkTableInstance;
 
 public class DashboardTest extends Application
 {
@@ -32,7 +29,7 @@ public class DashboardTest extends Application
 	@Override
 	public void start(Stage primaryStage)
 	{
-		primaryStage.setTitle("Hello World!");
+		primaryStage.setTitle("Warbots Dashboard");
 
 		BorderPane root = new BorderPane();
 		
