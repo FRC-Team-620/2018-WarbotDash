@@ -1,3 +1,5 @@
+import com.sun.prism.paint.Color;
+
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import javafx.animation.KeyFrame;
@@ -8,6 +10,8 @@ import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -47,7 +51,9 @@ public class DashboardTest extends Application
 		
 		Text currentSelected = new Text("Not Connected");
 		
-		VBox info = new VBox(selectionArea, currentSelected);
+		Text pressure = new Text("Not Connected");
+		
+		VBox info = new VBox(selectionArea, currentSelected, pressure);
 		
 		root.setCenter(info);
 		
@@ -60,6 +66,7 @@ public class DashboardTest extends Application
 		
 		NetworkTableEntry startingPositionOptions = networkTables.getEntry("/SmartDashboard/Starting Position/options");
 		NetworkTableEntry startingPositionSelected = networkTables.getEntry("/SmartDashboard/Starting Position/selected");
+		NetworkTableEntry pressureGauge = networkTables.getEntry("/SmartDashboard/Pressure Sensor/pressure");
 		
 		upload.setOnMousePressed(e -> startingPositionSelected.setString(dropDown.getValue()));
 		
@@ -70,9 +77,17 @@ public class DashboardTest extends Application
 				connectionStatus.setText("Connected");
 				autoOptions.setAll(startingPositionOptions.getStringArray(new String[] {"Unable to Load Options"}));
 				currentSelected.setText("Selected: " + startingPositionSelected.getString("Unable to Load"));
+				
+				double amountOfPressure = pressureGauge.getDouble(Double.NaN);
+				pressure.setText("Pressure: " + amountOfPressure);
+				if (amountOfPressure <= 70)
+					root.setStyle("-fx-background-color: #FF0000;");
+				else
+					root.setStyle("-fx-background-color: #FFFFFF");
 			}
 			else
 			{
+				pressure.setText("Not Connected");
 				currentSelected.setText("Not Connected");
 				connectionStatus.setText("Not Connected");
 			}
